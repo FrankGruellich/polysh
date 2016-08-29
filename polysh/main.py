@@ -27,6 +27,7 @@ import os
 import signal
 import sys
 import termios
+import readline
 
 if sys.hexversion < 0x02040000:
         print >> sys.stderr, 'Your python version is too old (%s)' % \
@@ -162,6 +163,12 @@ def main_loop():
                 remote_dispatcher.main_loop_iteration()
         except asyncore.ExitNow, e:
             console_output('')
+            homedir = os.getenv("HOME")
+            history_file = os.path.join(homedir, ".polysh_history")
+            try:
+                readline.write_history_file(history_file)
+            except IOError:
+                pass
             sys.exit(e.args[0])
 
 def setprocname(name):

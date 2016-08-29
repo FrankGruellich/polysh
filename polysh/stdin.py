@@ -223,6 +223,12 @@ class stdin_thread(Thread):
             the_stdin_thread.socket_notification = socket_notification_reader()
             the_stdin_thread.prepend_text = None
             readline.set_pre_input_hook(the_stdin_thread.prepend_previous_text)
+            homedir = os.getenv("HOME")
+            history_file = os.path.join(homedir, ".polysh_history")
+            try:
+                readline.read_history_file(history_file)
+            except IOError:
+                pass
 
     def prepend_previous_text(self):
         if self.prepend_text:
